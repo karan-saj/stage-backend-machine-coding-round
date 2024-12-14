@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { Movie, MovieDocument } from '../../models/movie.schema';
 import { TVShow, TVShowDocument } from '../../models/tvshow.schema';
 import { User, UserDocument } from 'src/models/user.schema';
-import { AddToMyList } from '../dto/add-to-my-list.dto';
+import { AddToMyListDto } from '../dto/add-to-my-list.dto';
 
 @Injectable()
 export class UserUtil {
@@ -69,7 +69,7 @@ export class UserUtil {
    * @returns
    */
   async validateAddToListRequset(
-    addToMyListDto: AddToMyList,
+    addToMyListDto: AddToMyListDto,
   ): Promise<boolean> {
     const user = await this.userModel.findById(addToMyListDto.userId);
     if (!user) {
@@ -110,7 +110,7 @@ export class UserUtil {
    * @param addToMyList
    * @returns updated List
    */
-  async updateUserList(addToMyList: AddToMyList) {
+  async updateUserList(addToMyList: AddToMyListDto) {
     const user = await this.userModel.findById(addToMyList?.userId);
 
     const contentId = addToMyList?.contentId;

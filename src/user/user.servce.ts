@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/models/user.schema';
-import { AddToMyList } from './dto/add-to-my-list.dto';
+import { AddToMyListDto } from './dto/add-to-my-list.dto';
 import { UserUtil } from './util/user-util.service';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class UserService {
    * @param addToMyListDto AddToMyList
    * @returns
    */
-  async addToList(addToMyListDto: AddToMyList) {
+  async addToList(addToMyListDto: AddToMyListDto) {
     try {
       await this.userUtil.validateAddToListRequset(addToMyListDto);
 

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.servce';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { AddToMyList } from './dto/add-to-my-list.dto';
+import { AddToMyListDto } from './dto/add-to-my-list.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -30,7 +30,7 @@ export class UserController {
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @UsePipes(new ValidationPipe({ transform: true })) // Apply validation using ValidationPipe
-  async addToList(@Body() addToMyListDto: AddToMyList) {
+  async addToList(@Body() addToMyListDto: AddToMyListDto) {
     try {
       const list = await this.userService.addToList(addToMyListDto);
       return { list: list };
