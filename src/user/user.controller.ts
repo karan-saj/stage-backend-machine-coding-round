@@ -7,7 +7,6 @@ import {
   Param,
   UsePipes,
   ValidationPipe,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.servce';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
@@ -36,7 +35,7 @@ export class UserController {
       const list = await this.userService.addToList(addToMyListDto);
       return { list: list };
     } catch (error) {
-      throw new NotFoundException('Unable to add item to list');
+      throw new Error('Unable to add item to list');
     }
   }
 
@@ -61,7 +60,7 @@ export class UserController {
       const list = await this.userService.removeFromList(userId, itemId);
       return { list: list };
     } catch (error) {
-      throw new NotFoundException('Unable to remove item from list');
+      throw new Error('Unable to remove item from list');
     }
   }
 
@@ -79,7 +78,7 @@ export class UserController {
       const items = await this.userService.listMyItems(userId);
       return { items };
     } catch (error) {
-      throw new NotFoundException('Unable to fetch items for the user');
+      throw new Error('Unable to fetch items for the user');
     }
   }
 
@@ -97,7 +96,20 @@ export class UserController {
       const user = await this.userService.listUser(userId);
       return { user };
     } catch (error) {
-      throw new NotFoundException('User not found');
+      throw new Error('User not found');
+    }
+  }
+
+  @Get('user')
+  @ApiOperation({ summary: 'Get details of a all user' })
+  @ApiResponse({ status: 200, description: 'User successfully fetched.' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async listUsers() {
+    try {
+      const user = await this.userService.listUsers();
+      return { user };
+    } catch (error) {
+      throw new Error('User not found');
     }
   }
 }
