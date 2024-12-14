@@ -61,29 +61,17 @@ export class UserService {
   }
 
   /**
-   * Fetch User's My List
-   * @param userId
-   * @returns Return items in User's My List
-   */
-  /**
    * Fetch User's My List with Pagination
    * @param userId
+   * @param page (page number)
    * @param limit (number of items per page)
-   * @param offset (page number)
-   * @returns Paged items in User's My List
-   */
-  /**
-   * Fetch User's My List with Pagination and Caching
-   * @param userId
-   * @param limit (number of items per page)
-   * @param offset (page number)
    * @returns Paged items in User's My List
    */
   @Cacheable({
     ttl: 600, // Cache for 10 minutes (600 seconds)
     key: (args) => `user:${args[0]}:myList:${args[1]}:${args[2]}`, // Cache key includes userId, offset, and limit
   })
-  async listMyItems(userId: string, limit: number = 10, offset: number = 0) {
+  async listMyItems(userId: string, page: number = 1, limit: number = 10) {
     try {
       const user = await this.userModel
         .findById(userId)
@@ -94,15 +82,15 @@ export class UserService {
         throw new Error('User not found');
       }
 
-      // Pagination: Use slice to implement offset and limit
+      // Pagination: Use slice to implement page and limit
       const totalItems = user.myList.length;
-      const paginatedItems = user.myList.slice(offset, offset + limit);
+      const paginatedItems = user.myList.slice(page, page + limit);
 
       // Pagination metadata
       const pagination = {
         totalItems,
         totalPages: Math.ceil(totalItems / limit),
-        currentPage: Math.floor(offset / limit) + 1,
+        currentPage: Math.floor(page / limit) + 1,
         pageSize: limit,
       };
 

@@ -7,9 +7,10 @@ import {
   Param,
   UsePipes,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.servce';
-import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { AddToMyListDto } from './dto/add-to-my-list.dto';
 
 @ApiTags('User')
@@ -73,9 +74,25 @@ export class UserController {
   @ApiOperation({ summary: 'Get the user’s list of items' })
   @ApiResponse({ status: 200, description: 'Items successfully fetched.' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async listMyItems(@Param('userId') userId: string) {
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of items per page',
+  })
+  async listMyItems(
+    @Param('userId') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
     try {
-      const items = await this.userService.listMyItems(userId);
+      const items = await this.userService.listMyItems(userId, page, limit);
       return { items };
     } catch (error) {
       throw new Error('Unable to fetch items for the user');
