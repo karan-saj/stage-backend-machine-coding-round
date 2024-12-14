@@ -4,8 +4,8 @@ import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../models/user.schema';
 import { UserUtil } from './util/user-util.service';
-import { Movie, MovieSchema } from 'src/models/movie.schema';
-import { TVShow, TVShowSchema } from 'src/models/tvshow.schema';
+import { Movie, MovieSchema } from '../models/movie.schema';
+import { TVShow, TVShowSchema } from '../models/tvshow.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
