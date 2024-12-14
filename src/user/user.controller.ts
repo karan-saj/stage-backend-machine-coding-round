@@ -5,10 +5,13 @@ import {
   Get,
   Body,
   Param,
+  UsePipes,
+  ValidationPipe,
   NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.servce';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { AddToMyList } from './dto/add-to-my-list.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -27,15 +30,10 @@ export class UserController {
     description: 'Item added to the list successfully.',
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  async addToList(
-    @Body() data: { userId: string; contentId: string; contentType: string },
-  ) {
+  @UsePipes(new ValidationPipe({ transform: true })) // Apply validation using ValidationPipe
+  async addToList(@Body() addToMyListDto: AddToMyList) {
     try {
-      const list = await this.userService.addToList(
-        data.userId,
-        data.contentId,
-        data.contentType,
-      );
+      const list = await this.userService.addToList(addToMyListDto);
       return { list: list };
     } catch (error) {
       throw new NotFoundException('Unable to add item to list');
