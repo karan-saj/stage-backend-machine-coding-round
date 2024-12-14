@@ -3,11 +3,16 @@ import { UserService } from './user.servce';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../models/user.schema';
+import { UserUtil } from './util/user-util.service';
+import { Movie, MovieSchema } from 'src/models/movie.schema';
+import { TVShow, TVShowSchema } from 'src/models/tvshow.schema';
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), // Register Movie model with Mongoose
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
+    MongooseModule.forFeature([{ name: TVShow.name, schema: TVShowSchema }]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, UserUtil],
 })
 export class UserModule {}
