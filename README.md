@@ -1,120 +1,89 @@
-# OTT Platform "My List" Feature - Developer Evaluation Project
+# OTT Platform "My List" Feature - Project
+This project simulates an Over-the-Top (OTT) platform where users can manage their personal content list ("My List"). Built using NestJS, the application allows users to add, view, and remove movies and TV shows from their list. The goal of the project was to improve the existing codebase by implementing the "My List" feature and addressing various requirements, such as validation, error handling, and testing.
 
-Welcome to the OTT Platform "My List" feature evaluation project. This project is designed to assess your problem-solving skills, debugging abilities, and overall proficiency in improving an existing codebase. The project is built using [NestJS](https://nestjs.com/), and your task will involve refining the current implementation and adding new features.
-
-## Project Overview
-
-This project simulates a basic OTT (Over-the-Top) platform where users can add content (movies, series, etc.) to their "My List" feature. The backend is implemented with NestJS, and we have already seeded the database with some initial data and models.
-
-Your job will be to address existing issues, optimize the current code, and extend it by adding the required functionalities.
-
-### What you will be working on:
-- **Fix existing bugs** in the project.
-- **Improve and optimize** the current implementation.
-- **Add new features** to enhance the functionality of the "My List" feature.
+## Key Implementations:
+Implemented the "My List" feature with endpoints to add, view, and remove items.
+Ensured data validation to prevent adding duplicate items.
+Created unit and integration tests for the new functionalities.
+Updated Swagger documentation to reflect the newly added endpoints.
 
 ## Getting Started
+Prerequisites
+To set up the project locally, you will need the following tools installed:
 
-### Prerequisites
+Node.js v18 or above
+Docker & Docker Compose (for environment setup)
+Setup Instructions
+1. Clone the Repository
+Clone the repository and navigate to the project directory:
 
-Before running the application, ensure you have the following prerequisites installed on your machine:
+bash
+Copy code
+git clone https://github.com/karan-saj/stage-backend-machine-coding-round
+cd stage-backend-machine-coding-round
+2. Install Dependencies
+Run the following command to install the required dependencies:
 
-- Node.js v18 or above
-- Docker
-- Docker Compose
+bash
+Copy code
+npm install
+3. Set Up the Database and Run the Project
+Run the application with Docker Compose:
 
-### Setting Up the Project
-
-1. **Clone the repository** to your local machine:
-   ```bash
-   git clone <repository-url>
-
-
-### Getting Started
-
-To start the project locally, use the following command:
-
-```bash
+bash
+Copy code
 docker-compose up --build
-```
+This will build the necessary containers and start the project locally.
 
+## Swagger Documentation
+Once the project is running, you can access the Swagger API Documentation at:
 
+Swagger API Documentation - http://127.0.0.1:3000/api#/
 
-### Swagger Documentation for existing apis
-Swagger Documentation: http://127.0.0.1:3000/api
+## API Endpoints
+1. My List Endpoints
+The following endpoints are now available:
 
+GET /users/{userId}
+GET /users/list/{userId}
+POST /users/list
+DELETE /users/list/{userId}/{itemId}
 
-### API Endpoints to Be Developed
-The application needs to expose the following API endpoints by the completion of this assignment:
+2. Existing Endpoints for Movies and TV Shows
+The following endpoints were already implemented and are available:
 
-- GET /list: Lists all items added to the user's list with pagination.
-- POST /list: Adds items to the user's list.
-- DELETE /list: Removes an item from the user's list.
+GET /movies: Lists all movies.
+POST /movies: Adds a new movie.
+GET /tvshows: Lists all TV shows.
+POST /tvshows: Adds a new TV show.
 
-### Detailed Requirements for the API:
-- GET /list should include pagination support (e.g., limit and offset).
-- POST /list must validate incoming data and ensure no duplicate items are added.
-- DELETE /list should ensure proper validation of the item being removed and return meaningful responses.
+## Testing
+Running Unit Tests
+To run the unit tests for the application, use:
 
-### Existing Endpoints in the Application
-You can use the following existing endpoints to interact with movies and TV shows:
+bash
+Copy code
+npm run test
+Running Linting & Formatting
+To check the code for any linting or formatting issues, run:
 
-- GET /movies: Lists all movies.
-- POST /movies: Adds a new movie.
-- GET /tvshows: Lists all TV shows.
-- POST /tvshows: Adds a TV show.
-Note: These endpoints are already implemented and should function correctly. Feel free to review and improve them where necessary.
-
-## Evaluation Criteria
-You will be evaluated based on the following aspects:
-
-### 1. Code Quality
-Readability: Code should be easy to read and understand. Use meaningful variable and function names, appropriate abstractions, and comments where necessary.
-Structure: Follow NestJS best practices in terms of module and service organization. Adhere to SOLID principles and ensure that each class, function, and file has a clear responsibility.
-DRY (Don't Repeat Yourself): Avoid code duplication. Look for ways to reuse existing logic where applicable.
-### 2. Error Handling and Validation
-Proper error handling should be in place for both synchronous and asynchronous operations. Use appropriate HTTP status codes for different error scenarios (e.g., 404 for not found, 400 for bad requests).
-Data validation should be comprehensive, with clear error messages returned for invalid inputs (e.g., missing required fields or incorrect data types).
-### 3. Testing
-Implement unit tests for critical components, especially the "My List" feature.
-Add integration tests for the new API endpoints.
-Test coverage should be meaningful, and the test suite should be easy to run (npm run test).
-### 4. Performance Optimization
-Ensure that database queries are optimized and do not introduce performance bottlenecks, especially in the "My List" feature, where users may have large lists.
-Look for opportunities to optimize code where applicable (e.g., using indexes for database queries).
-### 5. Best Practices
-Follow NestJS conventions for dependency injection, services, and controllers.
-Use environment variables and proper configuration management (e.g., database credentials, environment-specific settings).
-Adhere to RESTful API best practices in your implementation (e.g., using appropriate HTTP methods, status codes, and resource naming conventions).
-### 6. Code Formatting and Linting
-Ensure that the code is consistently formatted and follows a coding style guide. Prettier and ESLint are included in the project setup, and you should ensure there are no linting errors:
-
-```bash
+bash
+Copy code
 npm run lint
 npm run format
-```
 
-Follow naming conventions for files, variables, and classes in the project.
-### 7. Git Usage
-Use meaningful commit messages that clearly describe the changes you've made.
-Keep your commit history clean and logical. Avoid including unnecessary or temporary files in your commits.
-Create a branch for your changes and submit a pull request for review.
-### 8. Documentation
-Update the Swagger documentation to reflect any new endpoints or changes.
-Ensure your code is well-documented with appropriate inline comments where necessary, especially for complex logic.
-Briefly explain your approach in the pull request description or commit messages.
-### 9. Additional Improvements
-Feel free to make suggestions or implement additional improvements that you believe will add value to the project. For example, caching frequently requested data, optimizing database indexing, or refactoring existing code.
+## Improvements
+1. Caching implementation for GET user/list
+2. Pagination for GET user/list
+3. Check while updating list for duplicate entry is, content being present
+4. Get user details api created
+5. Date transformation for movie and tv show object
+6. Seed module created to pre seed db
 
-## Submission
-Once you have completed your work, push your changes to a new branch and submit a pull request. In your pull request description, include:
-
-A brief overview of the changes you made.
-Any challenges you faced and how you overcame them.
-A description of any additional improvements or optimizations you made.
-
-Good Luck!
-
-Feel free to reach out if you have any questions or need clarification on the requirements. We're looking forward to reviewing your submission and evaluating how you tackle this task!
-
-
+## Future Improvemts
+1. Error and logging inhancement
+2. Optimisig service classes to use utility methods for db operations and validation
+3. Adding more unit and integration test coverage
+4. Cleaning User controller return object based on business logic
+5. Having retry mechanisim for db layer
+6. Caching implementation for get api and updating cache on post calls
