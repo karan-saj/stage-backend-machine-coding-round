@@ -86,4 +86,6 @@ npm run format
 3. Adding more unit and integration test coverage
 4. Cleaning User controller return object based on business logic
 5. Having retry mechanisim for db layer
-6. Caching implementation for get api and updating cache on post calls
+6. Caching implementation for all get api and updating cache on post calls
+7. Cors updated for specific clients
+8. Outh verification
