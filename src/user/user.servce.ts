@@ -4,12 +4,15 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../models/user.schema';
 import { AddToMyListDto } from './dto/add-to-my-list.dto';
 import { UserUtil } from './util/user-util.service';
+import { InjectCacheManager } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly userUtil: UserUtil,
+    @InjectCacheManager() private readonly cacheManager: Cache,
   ) {}
 
   /**
@@ -66,6 +69,13 @@ export class UserService {
    */
   async listMyItems(userId: string) {
     try {
+      // Check if data is in cache
+      const cachedMyList = await this.cacheManager.get(`user:${userId}:myList`);
+      if (cachedMyList) {
+        return cachedMyList; // Return cached data
+      }
+
+      // If not cached, fetch from DB
       const user = await this.userModel
         .findById(userId)
         .select('myList')
@@ -74,10 +84,15 @@ export class UserService {
         throw new Error('User not found');
       }
 
+      // Cache the result for subsequent requests
+      await this.cacheManager.set(`user:${userId}:myList`, user.myList, {
+        ttl: 600,
+      });
+
       return user.myList;
     } catch (error) {
       console.error(error);
-      throw new Error('Failed to list items' + error.message);
+      throw new Error('Failed to list items: ' + error.message);
     }
   }
 
