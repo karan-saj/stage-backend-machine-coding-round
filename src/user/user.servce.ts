@@ -4,15 +4,13 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../models/user.schema';
 import { AddToMyListDto } from './dto/add-to-my-list.dto';
 import { UserUtil } from './util/user-util.service';
-import { InjectCacheManager } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Cacheable } from 'nestjs-cacheable';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly userUtil: UserUtil,
-    @InjectCacheManager() private readonly cacheManager: Cache,
   ) {}
 
   /**
@@ -67,29 +65,51 @@ export class UserService {
    * @param userId
    * @returns Return items in User's My List
    */
-  async listMyItems(userId: string) {
+  /**
+   * Fetch User's My List with Pagination
+   * @param userId
+   * @param limit (number of items per page)
+   * @param offset (page number)
+   * @returns Paged items in User's My List
+   */
+  /**
+   * Fetch User's My List with Pagination and Caching
+   * @param userId
+   * @param limit (number of items per page)
+   * @param offset (page number)
+   * @returns Paged items in User's My List
+   */
+  @Cacheable({
+    ttl: 600, // Cache for 10 minutes (600 seconds)
+    key: (args) => `user:${args[0]}:myList:${args[1]}:${args[2]}`, // Cache key includes userId, offset, and limit
+  })
+  async listMyItems(userId: string, limit: number = 10, offset: number = 0) {
     try {
-      // Check if data is in cache
-      const cachedMyList = await this.cacheManager.get(`user:${userId}:myList`);
-      if (cachedMyList) {
-        return cachedMyList; // Return cached data
-      }
-
-      // If not cached, fetch from DB
       const user = await this.userModel
         .findById(userId)
         .select('myList')
         .exec();
+
       if (!user) {
         throw new Error('User not found');
       }
 
-      // Cache the result for subsequent requests
-      await this.cacheManager.set(`user:${userId}:myList`, user.myList, {
-        ttl: 600,
-      });
+      // Pagination: Use slice to implement offset and limit
+      const totalItems = user.myList.length;
+      const paginatedItems = user.myList.slice(offset, offset + limit);
 
-      return user.myList;
+      // Pagination metadata
+      const pagination = {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: Math.floor(offset / limit) + 1,
+        pageSize: limit,
+      };
+
+      return {
+        items: paginatedItems,
+        pagination,
+      };
     } catch (error) {
       console.error(error);
       throw new Error('Failed to list items: ' + error.message);
