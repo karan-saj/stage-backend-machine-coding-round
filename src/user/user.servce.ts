@@ -104,21 +104,4 @@ export class UserService {
       throw new Error('Failed to fetch user details' + error.message);
     }
   }
-
-  // TODO: DONT PUSH
-  async listUsers() {
-    try {
-      const users = await this.userModel.find().exec();
-
-      if (!users || users.length === 0) {
-        throw new Error('No users found');
-      }
-
-      // Map over the users and return relevant details
-      return { users: users };
-    } catch (error) {
-      console.error(error);
-      throw new Error('Failed to fetch user details');
-    }
-  }
 }

@@ -99,17 +99,4 @@ export class UserController {
       throw new Error('User not found');
     }
   }
-
-  @Get('user')
-  @ApiOperation({ summary: 'Get details of a all user' })
-  @ApiResponse({ status: 200, description: 'User successfully fetched.' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async listUsers() {
-    try {
-      const user = await this.userService.listUsers();
-      return { user };
-    } catch (error) {
-      throw new Error('User not found');
-    }
-  }
 }
