@@ -23,7 +23,7 @@ export class UserController {
    * @param data
    * @returns Updated List
    */
-  @Post('add-to-list')
+  @Post('list')
   @ApiOperation({ summary: 'Add an item to the user’s list' })
   @ApiResponse({
     status: 201,
@@ -46,7 +46,7 @@ export class UserController {
    * @param itemId
    * @returns Updated List
    */
-  @Delete('remove-from-list/:userId/:itemId')
+  @Delete('list/:userId/:itemId')
   @ApiOperation({ summary: 'Remove an item from the user’s list' })
   @ApiResponse({
     status: 200,
@@ -70,7 +70,7 @@ export class UserController {
    * @param userId
    * @returns User's My List
    */
-  @Get('my-items/:userId')
+  @Get('list/:userId')
   @ApiOperation({ summary: 'Get the user’s list of items' })
   @ApiResponse({ status: 200, description: 'Items successfully fetched.' })
   @ApiResponse({ status: 404, description: 'User not found' })
@@ -104,7 +104,7 @@ export class UserController {
    * @param userId
    * @returns
    */
-  @Get('user/:userId')
+  @Get(':userId')
   @ApiOperation({ summary: 'Get details of a specific user' })
   @ApiResponse({ status: 200, description: 'User successfully fetched.' })
   @ApiResponse({ status: 404, description: 'User not found' })
